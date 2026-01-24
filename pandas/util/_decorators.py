@@ -404,57 +404,6 @@ def doc(*docstrings: None | str | Callable, **params: object) -> Callable[[F], F
     return decorator
 
 
-# Substitution and Appender are derived from matplotlib.docstring (1.1.0)
-# module https://matplotlib.org/users/license.html
-
-
-class Substitution:
-    """
-    A decorator to take a function's docstring and perform string
-    substitution on it.
-
-    This decorator should be robust even if func.__doc__ is None
-    (for example, if -OO was passed to the interpreter)
-
-    Usage: construct a docstring.Substitution with a sequence or
-    dictionary suitable for performing substitution; then
-    decorate a suitable function with the constructed object. e.g.
-
-    sub_author_name = Substitution(author='Jason')
-
-    @sub_author_name
-    def some_function(x):
-        "%(author)s wrote this function"
-
-    # note that some_function.__doc__ is now "Jason wrote this function"
-
-    One can also use positional arguments.
-
-    sub_first_last_names = Substitution('Edgar Allen', 'Poe')
-
-    @sub_first_last_names
-    def some_function(x):
-        "%s %s wrote the Raven"
-    """
-
-    def __init__(self, *args, **kwargs) -> None:
-        if args and kwargs:
-            raise AssertionError("Only positional or keyword args are allowed")
-
-        self.params = args or kwargs
-
-    def __call__(self, func: F) -> F:
-        func.__doc__ = func.__doc__ and func.__doc__ % self.params
-        return func
-
-    def update(self, *args, **kwargs) -> None:
-        """
-        Update self.params with supplied args.
-        """
-        if isinstance(self.params, dict):
-            self.params.update(*args, **kwargs)
-
-
 class Appender:
     """
     A function decorator that will append an addendum to the docstring
@@ -501,7 +450,6 @@ def indent(text: str | None, indents: int = 1) -> str:
 
 __all__ = [
     "Appender",
-    "Substitution",
     "cache_readonly",
     "deprecate",
     "deprecate_kwarg",

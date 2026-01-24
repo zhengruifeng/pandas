@@ -12,10 +12,6 @@ def __getattr__(key: str):
         from pandas.util._decorators import Appender
 
         return Appender
-    if key == "Substitution":
-        from pandas.util._decorators import Substitution
-
-        return Substitution
 
     if key == "cache_readonly":
         from pandas.util._decorators import cache_readonly
